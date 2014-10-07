@@ -181,6 +181,7 @@ class Scope(ScopeBase):
     the points scored by all users attempting a problem.
 
     """
+    configuration = ScopeBase(UserScope.NONE, BlockScope.TYPE, u'configuration')
     content = ScopeBase(UserScope.NONE, BlockScope.DEFINITION, u'content')
     settings = ScopeBase(UserScope.NONE, BlockScope.USAGE, u'settings')
     user_state = ScopeBase(UserScope.ONE, BlockScope.USAGE, u'user_state')
@@ -192,6 +193,7 @@ class Scope(ScopeBase):
     def named_scopes(cls):
         """Return all named Scopes."""
         return [
+            cls.configuration,
             cls.content,
             cls.settings,
             cls.user_state,
