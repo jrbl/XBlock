@@ -214,6 +214,7 @@ class ConfigurationFieldData(FieldData):
         # XXX doc that we treat settings for all xblocks and settings for a particular xblock interchangeable so one may override the other without a lot of special handling
         settings = self._data.get('_default', {})
         settings.update(self._data.get(block, {}))
+        print "****************\n\n{}\n\n************************".format(str(self._data))
         return settings
 
     def get(self, block, name):
