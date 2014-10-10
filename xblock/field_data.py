@@ -199,3 +199,31 @@ class ReadOnlyFieldData(FieldData):
 
     def default(self, block, name):
         return self._source.default(block, name)
+
+
+class ConfigurationFieldData(FieldData):
+    """
+    FIXME write docstring JRBL
+    A FieldData that wraps another FieldData an makes all calls to set and delete
+    raise :class:`~xblock.exceptions.InvalidScopeError`s.
+    """
+    def __init__(self, data):
+        self._data = data
+
+    def _get_all_settings(self, block):
+        # XXX doc that we treat settings for all xblocks and settings for a particular xblock interchangeable so one may override the other without a lot of special handling
+        settings = self._data.get('_default', {})
+        settings.update(self._data.get(block, {}))
+        return settings
+
+    def get(self, block, name):
+        return copy.deepcopy(self._get_all_settings(block).get(name))
+
+    def set(self, block, name, value):
+        raise InvalidScopeError("{block}.{name} is read-only, cannot set".format(block=block, name=name))
+
+    def delete(self, block, name):
+        raise InvalidScopeError("{block}.{name} is read-only, cannot delete".format(block=block, name=name))
+
+    def has(self, block, name):
+        return name in self._get_all_settings(block)
