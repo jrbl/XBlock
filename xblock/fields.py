@@ -150,8 +150,14 @@ ScopeBase = namedtuple('ScopeBase', 'user block name')  # pylint: disable=C0103
 
 class Scope(ScopeBase):
     """
-    Defines six types of scopes to be used: `content`, `settings`,
-    `user_state`, `preferences`, `user_info`, and `user_state_summary`.
+    Defines seven types of scopes to be used: `configuration`, `content`,
+    `settings`, `user_state`, `preferences`, `user_info`, and
+    `user_state_summary`.
+
+    The `configuration` scope is used to save data for all users, for all
+    blocks, across all runs of a course on a particular platform instance. An
+    example would be the delivery of site-wide settings from django's
+    settings.conf to an xblock with some optional set of behavior.
 
     The `content` scope is used to save data for all users, for one particular
     block, across all runs of a course. An example might be an XBlock that
@@ -181,7 +187,7 @@ class Scope(ScopeBase):
     the points scored by all users attempting a problem.
 
     """
-    configuration = ScopeBase(UserScope.NONE, BlockScope.TYPE, u'configuration')
+    configuration = ScopeBase(UserScope.ALL, BlockScope.TYPE, u'configuration')
     content = ScopeBase(UserScope.NONE, BlockScope.DEFINITION, u'content')
     settings = ScopeBase(UserScope.NONE, BlockScope.USAGE, u'settings')
     user_state = ScopeBase(UserScope.ONE, BlockScope.USAGE, u'user_state')
@@ -437,6 +443,8 @@ class Field(object):
         value = self._get_cached_value(xblock)
         if value is NO_CACHE_VALUE:
             if xblock._field_data.has(xblock, self.name):
+                if self.scope == Scope.configuration:
+                    import wtf; wtf.wtf(wvars=['xblock_class', 'xblock'])
                 value = self.from_json(xblock._field_data.get(xblock, self.name))
             elif self.name not in NO_GENERATED_DEFAULTS:
                 # Cache default value
