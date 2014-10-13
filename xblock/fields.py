@@ -443,8 +443,9 @@ class Field(object):
         value = self._get_cached_value(xblock)
         if value is NO_CACHE_VALUE:
             if xblock._field_data.has(xblock, self.name):
-                if self.scope == Scope.configuration:
+                if self.scope == Scope.configuration: # wtf line here too
                     import wtf; wtf.wtf(wvars=['xblock_class', 'xblock'])
+                print "\nScope: {}".format(self.scope) # wtf line here too
                 value = self.from_json(xblock._field_data.get(xblock, self.name))
             elif self.name not in NO_GENERATED_DEFAULTS:
                 # Cache default value

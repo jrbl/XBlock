@@ -152,9 +152,12 @@ class SplitFieldData(FieldData):
         if scope not in self._scope_mappings:
             raise InvalidScopeError(scope)
 
+        from wtf import wtf; sm = self._scope_mappings; wtf(wvars=['block', 'name', 'sm'])
+        print "************ {} is in scope {}".format(name, str(scope))
         return self._scope_mappings[scope]
 
     def get(self, block, name):
+        from wtf import wtf; wtf(wvars=['block', 'name'])
         return self._field_data(block, name).get(block, name)
 
     def set(self, block, name, value):
@@ -186,6 +189,7 @@ class ReadOnlyFieldData(FieldData):
         self._source = source
 
     def get(self, block, name):
+        from wtf import wtf; wtf(wvars=['block', 'name'])
         return self._source.get(block, name)
 
     def set(self, block, name, value):
@@ -195,9 +199,11 @@ class ReadOnlyFieldData(FieldData):
         raise InvalidScopeError("{block}.{name} is read-only, cannot delete".format(block=block, name=name))
 
     def has(self, block, name):
+        from wtf import wtf; wtf(wvars=['block', 'name'])
         return self._source.has(block, name)
 
     def default(self, block, name):
+        from wtf import wtf; wtf(wvars=['block', 'name'])
         return self._source.default(block, name)
 
 
