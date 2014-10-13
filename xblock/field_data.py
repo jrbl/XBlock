@@ -208,18 +208,15 @@ class ConfigurationFieldData(FieldData):
     raise :class:`~xblock.exceptions.InvalidScopeError`s.
     """
     def __init__(self, data):
-        from wtf import wtf; wtf(wvars=['data'])
         self._data = data
 
     def _get_all_settings(self, block):
         # XXX doc that we treat settings for all xblocks and settings for a particular xblock interchangeable so one may override the other without a lot of special handling
         settings = self._data.get('_default', {})
         settings.update(self._data.get(block, {}))
-        from wtf import wtf; wtf(wvars=['settings'])
         return settings
 
     def get(self, block, name):
-        from wtf import wtf; wtf(wvars=['block', 'name'])
         return copy.deepcopy(self._get_all_settings(block)).get(name)
 
     def set(self, block, name, value):
@@ -229,5 +226,4 @@ class ConfigurationFieldData(FieldData):
         raise InvalidScopeError("{block}.{name} is read-only, cannot delete".format(block=block, name=name))
 
     def has(self, block, name):
-        from wtf import wtf; wtf(wvars=['block', 'name'])
         return name in self._get_all_settings(block)
