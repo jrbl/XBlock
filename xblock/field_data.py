@@ -157,7 +157,6 @@ class SplitFieldData(FieldData):
         return self._scope_mappings[scope]
 
     def get(self, block, name):
-        from wtf import wtf; wtf(wvars=['block', 'name'])
         return self._field_data(block, name).get(block, name)
 
     def set(self, block, name, value):
@@ -189,7 +188,6 @@ class ReadOnlyFieldData(FieldData):
         self._source = source
 
     def get(self, block, name):
-        from wtf import wtf; wtf(wvars=['block', 'name'])
         return self._source.get(block, name)
 
     def set(self, block, name, value):
@@ -199,11 +197,9 @@ class ReadOnlyFieldData(FieldData):
         raise InvalidScopeError("{block}.{name} is read-only, cannot delete".format(block=block, name=name))
 
     def has(self, block, name):
-        from wtf import wtf; wtf(wvars=['block', 'name'])
         return self._source.has(block, name)
 
     def default(self, block, name):
-        from wtf import wtf; wtf(wvars=['block', 'name'])
         return self._source.default(block, name)
 
 
@@ -214,6 +210,7 @@ class ConfigurationFieldData(FieldData):
     raise :class:`~xblock.exceptions.InvalidScopeError`s.
     """
     def __init__(self, data):
+        print "************\nInitializing ConfigurationFieldData\n************" # wtf
         from wtf import wtf; wtf(wvars=['data'])
         self._data = data
 
