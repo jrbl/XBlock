@@ -149,10 +149,14 @@ class SplitFieldData(FieldData):
         """Return the field data for the field `name` on the :class:`~xblock.core.XBlock` `block`"""
         scope = block.fields[name].scope
 
+        if 'track' in name.lower():
+            debug_scope = getattr(scope, 'name', None) or scope
+            print "**SplitFieldData** {} is in scope {}".format(name, str(debug_scope))
+            print block, block.__class__, block.__class__.__name__
         if scope not in self._scope_mappings:
+            print "**SplitFieldData** {} not found".format(debug_scope) # wtf this line only
             raise InvalidScopeError(scope)
 
-        print "**SplitFieldData** {} is in scope {}".format(name, str(scope))
         return self._scope_mappings[scope]
 
     def get(self, block, name):
@@ -215,8 +219,9 @@ class ConfigurationFieldData(FieldData):
 
     def _get_all_settings(self, block):
         # XXX doc that we treat settings for all xblocks and settings for a particular xblock interchangeable so one may override the other without a lot of special handling
-        settings = self._data.get('_default', {})
-        settings.update(self._data.get(block, {}))
+        block_name = block.__class__.__name_
+        settings = self._data.get('_default', {}).copy()
+        settings.update(self._data.get(block_name, {}))
         from wtf import wtf; wtf(wvars=['settings'])
         return settings
 
