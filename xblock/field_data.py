@@ -152,8 +152,7 @@ class SplitFieldData(FieldData):
         if scope not in self._scope_mappings:
             raise InvalidScopeError(scope)
 
-        from wtf import wtf; sm = self._scope_mappings; wtf(wvars=['block', 'name', 'sm'])
-        print "************ {} is in scope {}".format(name, str(scope))
+        print "**SplitFieldData** {} is in scope {}".format(name, str(scope))
         return self._scope_mappings[scope]
 
     def get(self, block, name):
